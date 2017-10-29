@@ -1,0 +1,25 @@
+body {
+    background-color: #111010;
+}
+h1 {
+    color: blue;
+}
+p {
+    color: red;
+}
+
+#profileContainer {
+	width: 150px;
+	height: 150px;
+	overflow: hidden;
+	-webkit-border-radius: 30%;
+	-moz-border-radius: 30%;
+	-ms-border-radius: 30%;
+	-o-border-radius: 30%;
+	border-radius: 30%;
+}
+
+#profileContainer img {
+	width: 150px;
+	height: 150px;
+}

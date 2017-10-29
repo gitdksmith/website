@@ -4,7 +4,7 @@
   "description": "dereks first website",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "node ./node_modules/mocha/bin/mocha"
   },
   "author": "",
   "license": "ISC",
@@ -12,14 +12,14 @@
     "express": "^4.16.2",
     "file-system": "^2.2.2",
     "mmdb-reader": "^1.1.0",
+    "mustache": "^2.3.0",
+    "mustache-express": "^1.2.5",
     "sinon": "^4.0.1",
+    "stache": "^0.1.0",
     "string-template": "^1.0.0"
   },
   "devDependencies": {
     "chai": "^4.1.2",
     "mocha": "^4.0.1"
-  },
-  "scripts": {
-    "test": "node ./node_modules/mocha/bin/mocha"
   }
 }

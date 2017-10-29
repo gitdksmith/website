@@ -2,50 +2,52 @@
 
 const express = require('express');
 const app = express();
+const mustache = require('mustache-express');
 const fs = require('file-system');
 const mmdbReader = require('mmdb-reader');
 const reader = new mmdbReader('data/GeoLite2-Country_20171003/GeoLite2-Country.mmdb');
 
-app.use(express.static(__dirname + '/'));
-
 let banners = require('./banners');
-let lang = 'english';
 
-app.get('/', function(req, resp){
-	//resp.send(lines);
-	//console.log(req.connection.remoteAddress);
-	
-	//let cc = reader.lookup(req.connection.remoteAddress);
-	let cc = reader.lookup('66.90.167.133');
-	console.log('here with cc: '+ cc.registered_country.iso_code);
+app.engine('html', mustache());
+app.set('view engine', 'html');
+app.set('views', __dirname + '/views');
+app.use(express.static(__dirname + '/public'));
 
-	let text = '<!doctype html>';
-	text += banners[lang]();
+var russianCountries = ['RU', 'BY', 'KZ', 'KG'];
+var spanishCountries = ['MX', 'CL', 'ES', 'AR', 'CR', 'CO', 'BO', 'CL', 'CU', 'DO', 'EC', 'GT', 'HN', 'NI', 'PA', 'VE'];
+var chineseCountries = ['CN', 'TW', 'HK', 'MO'];
 
-	fs.readFile(__dirname + '/body.html', function(err, data){
-		if(!err){
-			console.log('trying to write body');
-			//resp.write(data);
-			text = text + data;
-		} else {
-			console.log('error writing body.html');
-		}
-		
-		console.log('text:: '+ text);
-		resp.send(text);
+app.get('/', function(req, res){
+	var banner = banners.getBanner(req);
+	res.render('index.html', {
+		header: banner
 	});
-
 });
 
-app.get('/banners',function(req, resp){
+function getLanguage(cc){
+	var defaultLang = 'english';
+	if(russianCountries.includes(cc)){
+		return 'russian';
+	}
+	if(chineseCountries.includes(cc)){
+		return 'chinese';
+	}
+	if(spanishCountries.includes(cc)){
+		return 'spanish';
+	}
+	return defaultLang;
+}
+
+app.get('/banners',function(req, res){
 	console.log('here ----- with lang ', lang);
 	console.log(banners[lang]());
 	console.log(banners.spanish('derp'));
-	resp.end();
+	res.end();
 });
 
-app.get('/reflect/:text', function(req,resp){
-	resp.send(req['params']['text']);
+app.get('/reflect/:text', function(req,res){
+	res.send(req['params']['text']);
 });
 
 app.listen(3000, function(error){
@@ -54,4 +56,5 @@ app.listen(3000, function(error){
 	} else {
 		console.log("Listening on port 3000");
 	}
+
 });
